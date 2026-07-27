@@ -1,0 +1,12 @@
+# Ignore local configuration files holding secret tokens
+.env
+
+# Ignore SQLite database files to avoid overwriting production data
+*.db
+
+# Ignore Python compiled bytecode and cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/

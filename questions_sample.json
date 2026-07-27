@@ -1,0 +1,603 @@
+[
+  {
+    "id": 1,
+    "question": "For lower premolars, the purpose of inclining the handpiece lingually is to,",
+    "options": [
+      "A. Avoid buccal pulp horn",
+      "B. Avoid lingual pulp horn",
+      "C. Remove unsupported enamel",
+      "D. Conserve lingual dentine"
+    ],
+    "correct_answer": "A",
+    "explanation": "Q2 = A"
+  },
+  {
+    "id": 2,
+    "question": "For an amalgam Restoration of weakened cusp you should,",
+    "options": [
+      "A. reduce cusp by 2mm on a flat base for more resistance",
+      "B. reduce cusp by 2mm following the outline of the cusp",
+      "C. reduce 2mm for retention form"
+    ],
+    "correct_answer": "",
+    "explanation": ""
+  },
+  {
+    "id": 3,
+    "question": "Before filling a class V abrasion cavity with GIC you should,",
+    "options": [
+      "A. Clean with pumice, rubber cup, water and weak acid",
+      "B. Dry the cavity thoroughly before doing anything",
+      "C. Acid itch cavity then dry thoroughly"
+    ],
+    "correct_answer": "A",
+    "explanation": "Q4 = A"
+  },
+  {
+    "id": 4,
+    "question": "Which of the following statement about the defective margins of amalgam restoration is true?",
+    "options": [
+      "A. The larger the breakdown, the greater the chance of decay."
+    ],
+    "correct_answer": "",
+    "explanation": ""
+  },
+  {
+    "id": 5,
+    "question": "The retention Pin in an amalgam restoration should be placed,",
+    "options": [
+      "A. Parallel to the outer wall",
+      "B. Parallel to the long axis of tooth"
+    ],
+    "correct_answer": "A",
+    "explanation": "Q6 = A"
+  },
+  {
+    "id": 6,
+    "question": "The most common cause of failure of the IDN “Inferior Dental Nerve” block is,",
+    "options": [
+      "A. Injecting too low",
+      "B. Injecting too high"
+    ],
+    "correct_answer": "",
+    "explanation": ""
+  },
+  {
+    "id": 7,
+    "question": "Which one of the following are not used in water fluoridation:",
+    "options": [
+      "A. SnF2",
+      "B. 1.23% APF",
+      "C. H2SiF2",
+      "D. CaSiF2",
+      "E. 8% Stannous fluoride"
+    ],
+    "correct_answer": "C",
+    "explanation": "Q8 = C"
+  },
+  {
+    "id": 8,
+    "question": "The best way to clean cavity before the placement of GIC is,",
+    "options": [
+      "A. H2O2",
+      "B. Phosphoric Acid",
+      "C. Polyacrylic acid"
+    ],
+    "correct_answer": "",
+    "explanation": ""
+  },
+  {
+    "id": 9,
+    "question": "The most mineralised part of dentine is,",
+    "options": [
+      "A. Peritubular dentine"
+    ],
+    "correct_answer": "A",
+    "explanation": "Q10= B"
+  },
+  {
+    "id": 10,
+    "question": "A 45 year old patient awoke with swollen face, puffiness around the eyes, and oedema of the upper lip with redness and dryness. When he went to bed he had the swelling, pain or dental complaints. Examination shows several deep silicate restorations in the anterior teeth but examination is negative for caries, thermal tests, percussion, palpation, pain, and periapical area of rarefaction. The patient’s temperature is normal. The day before he had a series of gastrointestinal x-rays at the local hospital and was given a clean bill of health. The condition is:",
+    "options": [
+      "A. Acute periapical abscess",
+      "B. Angioneurotic oedema",
+      "C. Infectious mononucleosis",
+      "D. Acute maxillary sinusitis",
+      "E. Acute apical periodontitis"
+    ],
+    "correct_answer": "",
+    "explanation": ""
+  },
+  {
+    "id": 11,
+    "question": "Internal resorption is,",
+    "options": [
+      "A. Radiolucency over unaltered canal",
+      "B. Usually in a response to trauma",
+      "C. Radiopacity over unaltered canal"
+    ],
+    "correct_answer": "B",
+    "explanation": "Q12= E"
+  },
+  {
+    "id": 12,
+    "question": "On replantation of an avulsed tooth could see,",
+    "options": [
+      "A. Surface resorption, external resorption",
+      "B. Internal resorption",
+      "C. Inflammatory resorption",
+      "D. Replacement resorption",
+      "E. A, C and D F. All of the above"
+    ],
+    "correct_answer": "",
+    "explanation": ""
+  },
+  {
+    "id": 13,
+    "question": "The percentage of total dentine surface dentinal tubules make in 0.5mm away from pulp is,",
+    "options": [
+      "A. 20%",
+      "B. 50%"
+    ],
+    "correct_answer": "B",
+    "explanation": "Q14= C or D ?"
+  },
+  {
+    "id": 14,
+    "question": "The junction between primary and secondary dentine is,",
+    "options": [
+      "A. A reversal line",
+      "B. Sharp curvature",
+      "C. A resting line",
+      "D. A reduction in the number of tubules"
+    ],
+    "correct_answer": "",
+    "explanation": ""
+  },
+  {
+    "id": 15,
+    "question": "What is the correct sequence of events",
+    "options": [
+      "A. Differentiation of odontoblast, elongation of enamel epithelium, dentine formation then enamel formation.",
+      "B. Differentiation of odontoblast, dentine formation then enamel formation, elongation of enamel epithelium.",
+      "C. Elongation of enamel epithelium, differentiation of odontoblast, dentine formation then enamel formation."
+    ],
+    "correct_answer": "C",
+    "explanation": "Q16= A"
+  },
+  {
+    "id": 16,
+    "question": "What is the sequence from superficial to the deepest in dentine caries?",
+    "options": [
+      "A. Zone of bacterial penetration, demineralisation, sclerosis, reparative dentine",
+      "B. Zone of bacterial penetration, reparative dentine, demineralisation, sclerosis.",
+      "C. Zone of bacterial penetration, sclerosis, reparative dentine, demineralisation."
+    ],
+    "correct_answer": "",
+    "explanation": ""
+  },
+  {
+    "id": 17,
+    "question": "The nerve supply of the pulp is composed of which type of nerve fibres?",
+    "options": [
+      "A. Afferent & sympathetic"
+    ],
+    "correct_answer": "A",
+    "explanation": "Q18= A see Q 1003"
+  },
+  {
+    "id": 18,
+    "question": "In which direction does the palatal root of the upper first molar usually curve towards?",
+    "options": [
+      "A. Facial / buccal/",
+      "B. Lingual",
+      "C. Mesial",
+      "D. Distal"
+    ],
+    "correct_answer": "",
+    "explanation": ""
+  },
+  {
+    "id": 19,
+    "question": "What is the common appearance of vertical tooth fracture?",
+    "options": [
+      "A. Perio abscess like appearance",
+      "B. Displacement of fragments"
+    ],
+    "correct_answer": "A",
+    "explanation": "Q20= A"
+  },
+  {
+    "id": 20,
+    "question": "Which of the following would be ONE possible indication for indirect pulp capping?",
+    "options": [
+      "A. Where any further excavation of dentine would result in pulp exposure.",
+      "B. Removal of caries has exposed the pulp",
+      "C. When carious lesion has just penetrated DEJ"
+    ],
+    "correct_answer": "",
+    "explanation": ""
+  },
+  {
+    "id": 21,
+    "question": "Following trauma to tooth, the next day there was no response to pulp tests you should?",
+    "options": [
+      "A. Review again later",
+      "B. Start endodontic treatment",
+      "C. Extraction of tooth"
+    ],
+    "correct_answer": "A",
+    "explanation": "Q22= A"
+  },
+  {
+    "id": 22,
+    "question": "What is the main purpose of performing pulp test on a recently traumatised tooth?",
+    "options": [
+      "A. Obtain baseline response",
+      "B. Obtain accurate indication about pulp vitality"
+    ],
+    "correct_answer": "",
+    "explanation": ""
+  },
+  {
+    "id": 23,
+    "question": "What is the main function of EDTA in endodontics?",
+    "options": [
+      "A. Decalcification of dentine",
+      "B. Cleaning debris from root canal"
+    ],
+    "correct_answer": "A",
+    "explanation": "Q24=A"
+  },
+  {
+    "id": 24,
+    "question": "Which is NOT TRUE in relation to the prescription of 5mg or 10mg of diazepam for sedation?",
+    "options": [
+      "A. Patient commonly complain of post operative headache",
+      "B. An acceptable level of anxiolytic action is obtained when the drug is given one hour preoperatively",
+      "C. There is a profound amnesic action and no side affects",
+      "D. Active metabolites can give a level of sedation up to 8 hours post operatively",
+      "E. As Benzodiazepine the action can be reversed with Flumazepil"
+    ],
+    "correct_answer": "",
+    "explanation": ""
+  },
+  {
+    "id": 25,
+    "question": "Which of the following is TRUE in regards to high risk patient?",
+    "options": [
+      "A. 0.1ml of blood from Hepatitis B carrier is less infective than 0.1ml of blood from HIV patient",
+      "B. 0.1ml of blood from Hepatitis B carrier is more infective than 0.1ml of blood from HIV patient",
+      "C. Level of virus are similar in the blood and saliva of HIV patient",
+      "D. Level of virus in the saliva is not significant for Hepatitis B patient",
+      "E. The presence of Hepatitis B core Antigen in the blood means that active disease is not present"
+    ],
+    "correct_answer": "B",
+    "explanation": "Q26=B. Been answered E in another paper!! And on a recent paper the biological"
+  },
+  {
+    "id": 26,
+    "question": "Your employer in an attempt to update office sterilization procedures; what would you recommend as the BEST method to verify that sterilization has occurred:**",
+    "options": [
+      "A. Use spore test daily",
+      "B. Use indicator strips in each load and colour change tape on each package",
+      "C. Use indicator strips daily and spore test weekly",
+      "D. Use colour change tape daily and spore test monthly",
+      "E. Use colour change tape in each load and spore tests weekly"
+    ],
+    "correct_answer": "",
+    "explanation": ""
+  },
+  {
+    "id": 27,
+    "question": "A 65 year old woman arrived for dental therapy. The answered questionnaire shows that she is suffering from severe cirrhosis. The problem that can be anticipated in the routine dental therapy is:",
+    "options": [
+      "A. Extreme susceptibility to pain",
+      "B. Tendency towards prolonged haemorrhage",
+      "C. Recurring oral infection",
+      "D. Increased tendency to syncope",
+      "E. Difficulty in achieving adequate local anaesthesia"
+    ],
+    "correct_answer": "B",
+    "explanation": "or prolonged bleeding"
+  },
+  {
+    "id": 28,
+    "question": "Loss of sensation in the lower lip may be produced by,",
+    "options": [
+      "A. Bell’s palsy",
+      "B. Traumatic bone cyst",
+      "C. Trigeminal neuralgia",
+      "D. Fracture in the mandible first molar region",
+      "E. Ludwig’s angina"
+    ],
+    "correct_answer": "D",
+    "explanation": "Q29=C"
+  },
+  {
+    "id": 29,
+    "question": "Patient received heavy blow to the right body of the mandible sustaining a fracture there. You should suspect a second fracture is most likely to be present in,",
+    "options": [
+      "A. Symphysis region",
+      "B. Left body of the mandible",
+      "C. Left sub-condylar region",
+      "D. Right sub-condylar region",
+      "E. sub-condylar region"
+    ],
+    "correct_answer": "",
+    "explanation": ""
+  },
+  {
+    "id": 30,
+    "question": "Signs and symptoms that commonly suggest cardiac failure in a patient being assessed for oral surgery are,",
+    "options": [
+      "A. Elevated temperature and nausea",
+      "B. Palpitations and malaise",
+      "C. Ankle oedema and dyspnoea",
+      "D. Erythema and pain",
+      "E. Pallor and tremor"
+    ],
+    "correct_answer": "C",
+    "explanation": "Q31=D Boucher 434"
+  },
+  {
+    "id": 31,
+    "question": "A cyst at the apex of an upper central incisor measuring 1 cm in diameter is visualized in radiograph and confirmed by aspiration biopsy; which method of treatment would you consider?**",
+    "options": [
+      "A. Extraction of the central incisor and retrieving the cyst through the socket",
+      "B. Exteriorizing the cyst through the buccal bone and mucosa",
+      "C. Making a mucoperiosteal flap and removing the cyst through an opening made in the alveolar bone, followed by tooth removal.",
+      "D. Making a mucoperiosteal flap and removing the cyst through an opening made in the alveolar bone, followed by endodontic treatment.",
+      "E. Routine orthograde endodontic treatment followed by observation."
+    ],
+    "correct_answer": "",
+    "explanation": ""
+  },
+  {
+    "id": 32,
+    "question": "A persistent oroantral fistula for a 12 weeks period following the extraction of a maxillary first permanent molar is best treated by,",
+    "options": [
+      "A. Further review and reassurance since it will most probably heal spontaneously",
+      "B. Antibiotic therapy and nasal decongestants",
+      "C. Curettage and dressing of the defect",
+      "D. Excision of the fistula and surgical closure",
+      "E. Maxillary antral wash out and nasal antrostomy."
+    ],
+    "correct_answer": "D",
+    "explanation": "Q33= C"
+  },
+  {
+    "id": 33,
+    "question": "The most significant finding in clinical evaluation of parotid mass may be accompanying,",
+    "options": [
+      "A. Lympha adenopathy",
+      "B. Nodular consistency",
+      "C. Facial paralysis",
+      "D. Slow progressive enlargement",
+      "E. Xerostomia"
+    ],
+    "correct_answer": "",
+    "explanation": ""
+  },
+  {
+    "id": 34,
+    "question": "As far as surgical removal of wisdom teeth is concerned which of the following is true?**",
+    "options": [
+      "A. Prophylactic prescription of antibiotic reduces dramatically the chances of infection",
+      "B. Raising a lingual flap will increases the incidence of neurapraxia but will reduce the incidence of neurotmesis with respect to the lingual nerve",
+      "C. Prophylactic prescription of dexamethasone will dramatically reduces post operative swelling",
+      "D. Inferior dental nerve injury is unlikely since the nerve passes medial to the wisdom tooth root",
+      "E. The use of vasoconstrictors in local anaesthetics will increase the chances of infection."
+    ],
+    "correct_answer": "B",
+    "explanation": "but a lot of people did answer A. While MCQs in dentistry has a similar question"
+  },
+  {
+    "id": 35,
+    "question": "Endogenous morphine like substance which can control pain is known as,**",
+    "options": [
+      "A. Bradykinins",
+      "B. Peptides",
+      "C. Prostaglandins",
+      "D. Serotonins",
+      "E. Enkephalins"
+    ],
+    "correct_answer": "E",
+    "explanation": "Enkephalins which is, Natural opiate pentapeptides isolated originally from pig"
+  },
+  {
+    "id": 36,
+    "question": "Platelets play an important role in haemostasis; which of the following describes this role?",
+    "options": [
+      "A. They convert fibrinogen to fibrin",
+      "B. They agglutinate and plug small, ruptured vessels",
+      "C. They initiate fibrinolysis in thrombosis",
+      "D. They supply fibrin stabilizing factors",
+      "E. They supply proconvertin for thromboplastin activation"
+    ],
+    "correct_answer": "B",
+    "explanation": "Q37=C"
+  },
+  {
+    "id": 37,
+    "question": "Suppuration is mainly the result of the combined action of four factors; which of the following is not one of these factors?",
+    "options": [
+      "A. Necrosis",
+      "B. Presence of lymphocytes",
+      "C. Collection of neutrophils",
+      "D. Accumulation of tissue fluid",
+      "E. Autolysis by proteolytic enzymes"
+    ],
+    "correct_answer": "",
+    "explanation": ""
+  },
+  {
+    "id": 38,
+    "question": "Which of the following lesions CANNOT BE classified as an intra-epithelial lesion?**",
+    "options": [
+      "A. Herpes simplex infections",
+      "B. Pemphigus vulgaris",
+      "C. Herpangina",
+      "D. Lichen planus",
+      "E. Hand, foot and mouth disease"
+    ],
+    "correct_answer": "D",
+    "explanation": "In some papers they had Pemphigoid lesions as an option as well as B. Cawson’s"
+  },
+  {
+    "id": 39,
+    "question": "In regards to HIV infection, which of the following is the earliest finding?",
+    "options": [
+      "A. Kaposi sarcoma on the palate",
+      "B. Reduced haemoglobin",
+      "C. Infection with pneumocystic carinii",
+      "D. Reduction in white cells count",
+      "E. B cell lymphoma"
+    ],
+    "correct_answer": "D",
+    "explanation": "Q40= D. In another paper they had Sever pain for long periods which is not characteristic"
+  },
+  {
+    "id": 40,
+    "question": "Which of the following is NOT CHARACTERISTIC of trigeminal neuralgia?**",
+    "options": [
+      "A. The pain usually last for few seconds up to a minute in the early stages of the disease",
+      "B. The pain is usually unilateral",
+      "C. Patient characteristically have sites on the skin that when stimulated precipitate an attack of pain",
+      "D. An attack of pain is usually preceded by sweating in the region of the forehead",
+      "E. It is a paroxysmal in nature and may respond to the treatment with Carbamazepine"
+    ],
+    "correct_answer": "",
+    "explanation": ""
+  },
+  {
+    "id": 41,
+    "question": "Benign migratory glossitis or Geographic Tongue, manifests itself in the oral cavity as,",
+    "options": [
+      "A. Irregularly outlined areas of hyperkeratosis of the dorsal surface of the tongue",
+      "B. Furrows outlined the dorsal surface radiating out from a central groove in the centre of the tongue",
+      "C. Loss (atrophy) of filiform papillae in multiple irregularly outlined areas",
+      "D. Irregularly outlined erythematous area of hyper trophic fungiform",
+      "E. A fibrinous exudate on the dorsal surface F. Grooves (fissures) radiating from a central fissure G. Irregular area in the midline of the tongue"
+    ],
+    "correct_answer": "C",
+    "explanation": "Q42=B"
+  },
+  {
+    "id": 42,
+    "question": "Which one of the following is true about oral hairy leukoplakia?",
+    "options": [
+      "A. Associated with HIV virus infection and is commonly seen on the dorsal of the tongue",
+      "B. Associated with HIV virus infection and is commonly seen on the lateral side of the tongue",
+      "C. Usually caused by Candida species",
+      "D. Always associated with trauma to the lateral side of the tongue",
+      "E. Always associated with pernicious anaemia"
+    ],
+    "correct_answer": "",
+    "explanation": ""
+  },
+  {
+    "id": 43,
+    "question": "Which of the following have a tendency to recur if not treated?",
+    "options": [
+      "A. Giant cell granuloma",
+      "B. Lipoma",
+      "C. Fibrous epulis",
+      "D. Haematoma",
+      "E. Pulp polyps"
+    ],
+    "correct_answer": "A",
+    "explanation": "Q44=B"
+  },
+  {
+    "id": 44,
+    "question": "Basal cell carcinoma is characterised by,",
+    "options": [
+      "A. Rapid growth and metastasis",
+      "B. Local cutaneous invasion",
+      "C. Inability to invade bone",
+      "D. Poor prognosis",
+      "E. Radiation resistance F. Can not metastasise to the bone"
+    ],
+    "correct_answer": "",
+    "explanation": ""
+  },
+  {
+    "id": 45,
+    "question": "Carcinoma of the tongue has a predilection for which of the following sites?**",
+    "options": [
+      "A. Lateral border anteriorly",
+      "B. Anterior dorsal surface",
+      "C. Posterior dorsal surface",
+      "D. Lateral border posteriorly",
+      "E. No preferred location"
+    ],
+    "correct_answer": "D",
+    "explanation": "The anterior (?) of the tongue is the site of two thirds of all tongue cancers. Men"
+  },
+  {
+    "id": 46,
+    "question": "A patient presents complaining of a stomach upset 48 hours after starting a course of antibiotic for oral infection, this is an example of,",
+    "options": [
+      "A. Type I allergic reaction",
+      "B. Nervous disorder",
+      "C. Side effect of the drug",
+      "D. Type IV hypersensitivity reaction",
+      "E. Pyloric stenosis"
+    ],
+    "correct_answer": "C",
+    "explanation": "Q47=D. Boucher 194"
+  },
+  {
+    "id": 47,
+    "question": "Trichloroacetic acid, a strong acid, has been used by dentists for chemical cautery of hypertrophic tissue and aphthous ulcers; its mechanism of action is,",
+    "options": [
+      "A. Thermodynamic action",
+      "B. Activation of tissue enzymes",
+      "C. Osmotic pressure",
+      "D. Protein precipitation PPT",
+      "E. Neutralization"
+    ],
+    "correct_answer": "",
+    "explanation": ""
+  },
+  {
+    "id": 48,
+    "question": "Which of the following adverse reaction of oral contraceptives is the most common and the most serious",
+    "options": [
+      "A. Hypotension",
+      "B. Hepatotoxicity",
+      "C. Uterine neoplasia",
+      "D. Thromboembolism disorder",
+      "E. Decreased resistance to infection"
+    ],
+    "correct_answer": "D",
+    "explanation": "Q49=A. Check www.migraine.com/treatment/proasprn.htm"
+  },
+  {
+    "id": 49,
+    "question": "A patient who has been taking quantities of aspirin might show increased post operative bleeding because aspirin inhibits:**",
+    "options": [
+      "A. Synthesis of thromboxane A2 and prevents platelet aggregation",
+      "B. Synthesis of prostacyclin and prevents platelet aggregation",
+      "C. Synthesis of prostaglandin and prevents production of blood platelets",
+      "D. Thrombin and prevents formation of the fibrin network",
+      "E. Increase the absorption of vitamin K and prevents synthesis of blood clotting factors"
+    ],
+    "correct_answer": "",
+    "explanation": ""
+  },
+  {
+    "id": 50,
+    "question": "A patient who recently had a calculus removed from the kidney presented with radiolucent area in the left maxilla with clinical evidence of swelling. The disease that you would immediately suggest is,",
+    "options": [
+      "A. Diabetes",
+      "B. Thyrotoxicosis",
+      "C. Hyperparathyroidism",
+      "D. Osteoporosis",
+      "E. Adrenal insufficiency"
+    ],
+    "correct_answer": "C",
+    "explanation": "Q51=B"
+  }
+]
