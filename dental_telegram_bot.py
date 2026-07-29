@@ -10,7 +10,7 @@ from dental_db import (
     get_question_by_id, get_next_question, get_pending_mistakes, search_questions,
     get_channel_last_id, update_channel_last_id, get_next_available_id,
     get_channel_post_count, increment_channel_post_count, reset_channel_post_count,
-    save_channel_poll_mapping, get_channel_poll_mapping, mark_channel_poll_comment_posted
+    save_channel_poll_mapping, get_channel_poll_mapping
 )
 
 # Helper to read .env file line by line without external dependencies
@@ -113,13 +113,20 @@ def send_quiz_poll(chat_id, question_data, is_anonymous=True, display_num=None):
     question_text = f"❓ Question #{num}  |  {lvl_badge}  |  {cat_header}\n\n{question_data['question']}"[:300]
     options = [opt[:100] for opt in shuffled_options[:10]]
 
-    # NO top explanation -> clean poll card
+    raw_exp = question_data.get('explanation', '')
+    if raw_exp:
+        # Clean, concise native explanation inside the poll card (no double blurring)
+        exp_text = f"💡 Clinical Explanation: {raw_exp[:170]}"[:200]
+    else:
+        exp_text = f"💡 Explanation: Correct choice is: {correct_option_text}. Reference: Master Dentistry."[:200]
+
     payload = {
         'chat_id': chat_id,
         'question': question_text,
         'options': json.dumps(options),
         'type': 'quiz',
         'correct_option_id': new_correct_id,
+        'explanation': exp_text,
         'is_anonymous': is_anonymous
     }
     
@@ -127,8 +134,6 @@ def send_quiz_poll(chat_id, question_data, is_anonymous=True, display_num=None):
     if res and res.get('ok'):
         poll_id = res['result']['poll']['id']
         msg_id = res['result'].get('message_id', None)
-        
-        # Save mapping persistently in SQLite database!
         save_channel_poll_mapping(poll_id, question_data['id'], num, msg_id, new_correct_id)
     return res
 
@@ -143,27 +148,9 @@ def post_next_channel_question():
     if res and res.get('ok'):
         increment_channel_post_count()
         update_channel_last_id(next_id)
-        print(f" Successfully posted Clean Question #{next_id} (Displayed as #{next_display}) to {CHANNEL_ID}")
+        print(f" Successfully posted Native Poll Question #{next_id} (Displayed as #{next_display}) to {CHANNEL_ID}")
         return next_display
     return None
-
-def trigger_post_vote_comment(poll_id):
-    info = get_channel_poll_mapping(poll_id)
-    if info and info['comment_posted'] == 0:
-        mark_channel_poll_comment_posted(poll_id)
-        msg_id = info['message_id']
-        q_id = info['question_id']
-        display_num = info['display_num']
-        
-        q_data = get_question_by_id(q_id)
-        if q_data and msg_id:
-            comment_text = (
-                f"📖 <b>Deep Clinical Reference — Question #{display_num}</b>\n"
-                f"━━━━━━━━━━━━━━━━━━━━━━\n"
-                f"{q_data['explanation']}"
-            )
-            send_message(CHANNEL_ID, comment_text, reply_to_message_id=msg_id, parse_mode='HTML')
-            print(f" Persistent auto-post of deep reference for Question #{display_num} to channel!")
 
 def get_main_keyboard():
     return {
@@ -260,7 +247,7 @@ def handle_channel_info(chat_id):
 
 def run_bot():
     init_db()
-    print("Dental Telegram Quiz Bot is NOW LIVE (Persistent SQLite Poll Triggering)!")
+    print("Dental Telegram Quiz Bot is NOW LIVE (Native Clean Poll Explanation)!")
     offset = 0
     
     while True:
@@ -270,18 +257,11 @@ def run_bot():
                 for update in res.get('result', []):
                     offset = update['update_id'] + 1
                     
-                    if 'poll' in update:
-                        p_id = update['poll']['id']
-                        if update['poll']['total_voter_count'] > 0:
-                            trigger_post_vote_comment(p_id)
-                            
                     if 'poll_answer' in update:
                         pa = update['poll_answer']
                         u_id = pa['user']['id']
                         p_id = pa['poll_id']
                         option_ids = pa.get('option_ids', [])
-                        
-                        trigger_post_vote_comment(p_id)
                         
                         info = get_channel_poll_mapping(p_id)
                         if info and option_ids:
