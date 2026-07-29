@@ -10,8 +10,7 @@ from dental_db import (
     init_db, get_user, update_user_progress, log_user_answer,
     get_question_by_id, get_next_question, get_pending_mistakes, search_questions,
     get_channel_last_id, update_channel_last_id, get_next_available_id,
-    get_channel_post_count, increment_channel_post_count, reset_channel_post_count,
-    save_channel_poll_mapping, get_channel_poll_mapping
+    get_channel_post_count, increment_channel_post_count, reset_channel_post_count
 )
 
 # Helper to read .env file line by line without external dependencies
@@ -91,33 +90,15 @@ def send_message(chat_id, text, reply_markup=None, reply_to_message_id=None, par
         payload['reply_to_message_id'] = reply_to_message_id
     return api_call('sendMessage', payload)
 
-def format_compact_explanation(raw_exp, correct_option_text):
-    if not raw_exp:
-        return f"💡 Correct choice: {correct_option_text[:40]}. Ref: Master Dentistry."[:195]
-        
-    parts = raw_exp.split('\n\n')
-    main_sentence = parts[0].strip()
-    
-    ref_text = ''
-    link_text = ''
-    
-    for p in parts[1:]:
-        if 'Book Reference:' in p:
-            ref_text = p.replace('Book Reference:', '').replace('🏛️', '').strip()
-        elif 'Study Link:' in p:
-            link_text = p.replace('Study Link:', '').replace('🔗', '').strip()
-            
-    res = f"💡 {main_sentence}"
-    if ref_text:
-        ref_clean = ref_text.replace('Master Dentistry ', 'MasterDent ').strip()
-        res += f"\n🏛️ {ref_clean}"
-    if link_text:
-        link_clean = link_text.replace('https://', '').replace('http://', '').strip()
-        res += f"\n🔗 {link_clean}"
-        
-    return res[:195]
+def answer_callback_query(callback_query_id, text, show_alert=True):
+    payload = {
+        'callback_query_id': callback_query_id,
+        'text': text,
+        'show_alert': show_alert
+    }
+    return api_call('answerCallbackQuery', payload)
 
-def send_quiz_poll(chat_id, question_data, is_anonymous=True, display_num=None):
+def send_inline_quiz(chat_id, question_data, display_num=None):
     category = question_data.get('category', 'General Dentistry')
     level = question_data.get('level', 'Level 2')
     
@@ -131,34 +112,35 @@ def send_quiz_poll(chat_id, question_data, is_anonymous=True, display_num=None):
     if correct_idx >= len(original_options):
         correct_idx = 0
         
-    correct_option_text = original_options[correct_idx]
+    letters = ['A', 'B', 'C', 'D', 'E', 'F']
     
-    shuffled_options = list(original_options)
-    random.shuffle(shuffled_options)
-    new_correct_id = shuffled_options.index(correct_option_text)
+    formatted_opts_lines = []
+    inline_buttons = []
+    row = []
     
-    question_text = f"❓ Question #{num}  |  {lvl_badge}  |  {cat_header}\n\n{question_data['question']}"[:300]
-    options = [opt[:100] for opt in shuffled_options[:10]]
-
-    raw_exp = question_data.get('explanation', '')
-    exp_text = format_compact_explanation(raw_exp, correct_option_text)
-
-    payload = {
-        'chat_id': chat_id,
-        'question': question_text,
-        'options': json.dumps(options),
-        'type': 'quiz',
-        'correct_option_id': new_correct_id,
-        'explanation': exp_text,
-        'is_anonymous': is_anonymous
-    }
+    for idx, opt in enumerate(original_options):
+        let = letters[idx] if idx < len(letters) else str(idx+1)
+        formatted_opts_lines.append(f"<b>{let})</b> {opt}")
+        row.append({
+            'text': f" Option {let} ",
+            'callback_data': f"quiz:{question_data['id']}:{idx}:{correct_idx}"
+        })
+        if len(row) == 2:
+            inline_buttons.append(row)
+            row = []
+    if row:
+        inline_buttons.append(row)
+        
+    opts_block = "\n".join(formatted_opts_lines)
+    msg_text = (
+        f"❓ <b>Question #{num}</b>  |  {lvl_badge}  |  {cat_header}\n\n"
+        f"{question_data['question']}\n\n"
+        f"{opts_block}\n\n"
+        f"👇 <i>Tap an option below to vote and reveal the clinical explanation:</i>"
+    )
     
-    res = api_call('sendPoll', payload)
-    if res and res.get('ok'):
-        poll_id = res['result']['poll']['id']
-        msg_id = res['result'].get('message_id', None)
-        save_channel_poll_mapping(poll_id, question_data['id'], num, msg_id, new_correct_id)
-    return res
+    reply_markup = {'inline_keyboard': inline_buttons}
+    return send_message(chat_id, msg_text, reply_markup=reply_markup, parse_mode='HTML')
 
 def post_next_channel_question():
     last_id = get_channel_last_id()
@@ -167,11 +149,11 @@ def post_next_channel_question():
     
     next_display = get_channel_post_count() + 1
     
-    res = send_quiz_poll(CHANNEL_ID, q, is_anonymous=True, display_num=next_display)
+    res = send_inline_quiz(CHANNEL_ID, q, display_num=next_display)
     if res and res.get('ok'):
         increment_channel_post_count()
         update_channel_last_id(next_id)
-        print(f" Successfully posted PubMed Live Question #{next_id} (Displayed as #{next_display}) to {CHANNEL_ID}")
+        print(f" Successfully posted Inline Button Quiz #{next_id} (Displayed as #{next_display}) to {CHANNEL_ID}")
         return next_display
     return None
 
@@ -203,7 +185,7 @@ def handle_start(chat_id, user_id, first_name, username):
 def handle_next_quiz(chat_id, user_id):
     q = get_next_question(user_id)
     if q:
-        send_quiz_poll(chat_id, q, is_anonymous=False)
+        send_inline_quiz(chat_id, q)
         update_user_progress(user_id, q['id'])
     else:
         send_message(chat_id, "🎉 Congratulations! You have completed all available questions!")
@@ -215,7 +197,7 @@ def handle_mistakes(chat_id, user_id):
     else:
         q = mistakes[0]
         send_message(chat_id, "🔴 <b>Reviewing Mistakes:</b>")
-        send_quiz_poll(chat_id, q, is_anonymous=False)
+        send_inline_quiz(chat_id, q)
 
 def handle_categories_menu(chat_id):
     cats_text = (
@@ -258,7 +240,7 @@ def execute_search(chat_id, query):
     else:
         send_message(chat_id, f"🔍 <b>Search Results for ({query}):</b>")
         for q in results:
-            send_quiz_poll(chat_id, q, is_anonymous=False)
+            send_inline_quiz(chat_id, q)
 
 def handle_channel_info(chat_id):
     info = (
@@ -270,7 +252,7 @@ def handle_channel_info(chat_id):
 
 def run_bot():
     init_db()
-    print("Dental Telegram Quiz Bot is NOW LIVE (PubMed Live Search Links Enabled)!")
+    print("Dental Telegram Quiz Bot is NOW LIVE (Inline Buttons Mandatory Alert Popup)!")
     offset = 0
     
     while True:
@@ -280,31 +262,33 @@ def run_bot():
                 for update in res.get('result', []):
                     offset = update['update_id'] + 1
                     
-                    if 'poll_answer' in update:
-                        pa = update['poll_answer']
-                        u_id = pa['user']['id']
-                        p_id = pa['poll_id']
-                        option_ids = pa.get('option_ids', [])
+                    if 'callback_query' in update:
+                        cq = update['callback_query']
+                        cq_id = cq['id']
+                        u_id = cq['from']['id']
+                        data = cq.get('data', '')
                         
-                        info = get_channel_poll_mapping(p_id)
-                        if info and option_ids:
-                            chosen = option_ids[0]
-                            is_corr = (chosen == info['correct_option_id'])
-                            log_user_answer(u_id, info['question_id'], chosen, is_corr)
+                        if data.startswith('quiz:'):
+                            parts = data.split(':')
+                            q_id = int(parts[1])
+                            chosen_idx = int(parts[2])
+                            corr_idx = int(parts[3])
                             
-                            q_data = get_question_by_id(info['question_id'])
+                            is_corr = (chosen_idx == corr_idx)
+                            log_user_answer(u_id, q_id, chosen_idx, is_corr)
+                            
+                            q_data = get_question_by_id(q_id)
                             if q_data:
-                                corr_idx = info['correct_option_id']
                                 corr_text = q_data['options'][corr_idx] if corr_idx < len(q_data['options']) else ""
-                                status_emoji = "✅ Correct" if is_corr else "❌ Incorrect"
+                                status_head = "✅ CORRECT ANSWER!" if is_corr else "❌ INCORRECT ANSWER!"
                                 
-                                exp_msg = (
-                                    f"{status_emoji} <b>Answer Analysis</b>\n"
-                                    f"━━━━━━━━━━━━━━━━━━━━━━\n"
-                                    f"🎯 <b>Correct Option:</b> <code>{corr_text}</code>\n\n"
+                                alert_msg = (
+                                    f"{status_head}\n"
+                                    f"🎯 Choice: {corr_text}\n\n"
                                     f"{q_data['explanation']}"
                                 )
-                                send_message(u_id, exp_msg)
+                                # Forces popup alert on student screen in 100% of cases (RIGHT OR WRONG)!
+                                answer_callback_query(cq_id, alert_msg[:195], show_alert=True)
                     
                     if 'message' in update and 'text' in update['message']:
                         msg = update['message']
