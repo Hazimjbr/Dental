@@ -9,7 +9,8 @@ from dental_db import (
     init_db, get_user, update_user_progress, log_user_answer,
     get_question_by_id, get_next_question, get_pending_mistakes, search_questions,
     get_channel_last_id, update_channel_last_id, get_next_available_id,
-    get_channel_post_count, increment_channel_post_count, reset_channel_post_count
+    get_channel_post_count, increment_channel_post_count, reset_channel_post_count,
+    save_channel_poll_mapping, get_channel_poll_mapping, mark_channel_poll_comment_posted
 )
 
 # Helper to read .env file line by line without external dependencies
@@ -33,8 +34,6 @@ BOT_TOKEN = env.get("BOT_TOKEN", "")
 CHANNEL_ID = env.get("CHANNEL_ID", "@dentistry_mcqs_2026")
 
 API_URL = f"https://api.telegram.org/bot{BOT_TOKEN}"
-
-poll_question_map = {}
 
 def get_formatted_category_header(category):
     cat_map = {
@@ -114,7 +113,7 @@ def send_quiz_poll(chat_id, question_data, is_anonymous=True, display_num=None):
     question_text = f"❓ Question #{num}  |  {lvl_badge}  |  {cat_header}\n\n{question_data['question']}"[:300]
     options = [opt[:100] for opt in shuffled_options[:10]]
 
-    # NO explanation passed to sendPoll -> removes top lightbulb 💡 popup completely!
+    # NO top explanation -> clean poll card
     payload = {
         'chat_id': chat_id,
         'question': question_text,
@@ -128,13 +127,9 @@ def send_quiz_poll(chat_id, question_data, is_anonymous=True, display_num=None):
     if res and res.get('ok'):
         poll_id = res['result']['poll']['id']
         msg_id = res['result'].get('message_id', None)
-        poll_question_map[poll_id] = {
-            'question_id': question_data['id'],
-            'correct_option_id': new_correct_id,
-            'channel_msg_id': msg_id,
-            'display_num': num,
-            'comment_posted': False
-        }
+        
+        # Save mapping persistently in SQLite database!
+        save_channel_poll_mapping(poll_id, question_data['id'], num, msg_id, new_correct_id)
     return res
 
 def post_next_channel_question():
@@ -144,7 +139,6 @@ def post_next_channel_question():
     
     next_display = get_channel_post_count() + 1
     
-    # Send clean poll without any initial comment or lightbulb
     res = send_quiz_poll(CHANNEL_ID, q, is_anonymous=True, display_num=next_display)
     if res and res.get('ok'):
         increment_channel_post_count()
@@ -154,23 +148,22 @@ def post_next_channel_question():
     return None
 
 def trigger_post_vote_comment(poll_id):
-    if poll_id in poll_question_map:
-        info = poll_question_map[poll_id]
-        if not info.get('comment_posted', False):
-            info['comment_posted'] = True
-            msg_id = info.get('channel_msg_id')
-            q_id = info.get('question_id')
-            display_num = info.get('display_num', q_id)
-            
-            q_data = get_question_by_id(q_id)
-            if q_data and msg_id:
-                comment_text = (
-                    f"📖 <b>Deep Clinical Reference — Question #{display_num}</b>\n"
-                    f"━━━━━━━━━━━━━━━━━━━━━━\n"
-                    f"{q_data['explanation']}"
-                )
-                send_message(CHANNEL_ID, comment_text, reply_to_message_id=msg_id, parse_mode='HTML')
-                print(f" Auto-posted post-vote deep reference for Question #{display_num} to channel!")
+    info = get_channel_poll_mapping(poll_id)
+    if info and info['comment_posted'] == 0:
+        mark_channel_poll_comment_posted(poll_id)
+        msg_id = info['message_id']
+        q_id = info['question_id']
+        display_num = info['display_num']
+        
+        q_data = get_question_by_id(q_id)
+        if q_data and msg_id:
+            comment_text = (
+                f"📖 <b>Deep Clinical Reference — Question #{display_num}</b>\n"
+                f"━━━━━━━━━━━━━━━━━━━━━━\n"
+                f"{q_data['explanation']}"
+            )
+            send_message(CHANNEL_ID, comment_text, reply_to_message_id=msg_id, parse_mode='HTML')
+            print(f" Persistent auto-post of deep reference for Question #{display_num} to channel!")
 
 def get_main_keyboard():
     return {
@@ -267,7 +260,7 @@ def handle_channel_info(chat_id):
 
 def run_bot():
     init_db()
-    print("Dental Telegram Quiz Bot is NOW LIVE (Clean Polls + Post-Vote Dynamic References)!")
+    print("Dental Telegram Quiz Bot is NOW LIVE (Persistent SQLite Poll Triggering)!")
     offset = 0
     
     while True:
@@ -277,7 +270,6 @@ def run_bot():
                 for update in res.get('result', []):
                     offset = update['update_id'] + 1
                     
-                    # Handle channel poll vote updates
                     if 'poll' in update:
                         p_id = update['poll']['id']
                         if update['poll']['total_voter_count'] > 0:
@@ -291,9 +283,9 @@ def run_bot():
                         
                         trigger_post_vote_comment(p_id)
                         
-                        if p_id in poll_question_map and option_ids:
+                        info = get_channel_poll_mapping(p_id)
+                        if info and option_ids:
                             chosen = option_ids[0]
-                            info = poll_question_map[p_id]
                             is_corr = (chosen == info['correct_option_id'])
                             log_user_answer(u_id, info['question_id'], chosen, is_corr)
                             

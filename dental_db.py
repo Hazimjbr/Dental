@@ -25,7 +25,6 @@ def calculate_difficulty_level(q_text, options_list):
     text_lower = q_text.lower()
     num_options = len(options_list) if isinstance(options_list, list) else 4
     
-    # Clinical complexity keywords for Level 3
     complexity_keywords = ['emergency', 'management', 'contraindicated', 'diagnose', 'syndrome', 'carcinoma', 'pathognomonic', 'complication']
     
     if num_options >= 5 or text_len > 180 or any(k in text_lower for k in complexity_keywords):
@@ -100,7 +99,19 @@ def init_db():
     cursor.execute('INSERT OR IGNORE INTO channel_settings (key, value) VALUES ("last_channel_q_id", "0")')
     cursor.execute('INSERT OR IGNORE INTO channel_settings (key, value) VALUES ("channel_post_count", "0")')
     
-    # 6. Weekly stats Table
+    # 6. Persistent Channel Polls Mapping Table
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS channel_polls (
+        poll_id TEXT PRIMARY KEY,
+        question_id INTEGER,
+        display_num INTEGER,
+        message_id INTEGER,
+        correct_option_id INTEGER,
+        comment_posted INTEGER DEFAULT 0
+    )
+    ''')
+    
+    # 7. Weekly stats Table
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS weekly_stats (
         user_id INTEGER,
@@ -111,7 +122,7 @@ def init_db():
     )
     ''')
     
-    # 7. Pearls Table
+    # 8. Pearls Table
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS pearls (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -122,7 +133,7 @@ def init_db():
     )
     ''')
     
-    # 8. Exam dates Table
+    # 9. Exam dates Table
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS exam_dates (
         user_id INTEGER PRIMARY KEY,
@@ -131,22 +142,8 @@ def init_db():
     )
     ''')
     
-    # 9. Challenger sessions Table
-    cursor.execute('''
-    CREATE TABLE IF NOT EXISTS challenger_sessions (
-        session_id TEXT PRIMARY KEY,
-        challenger_id INTEGER,
-        opponent_id INTEGER,
-        questions_json TEXT,
-        challenger_score INTEGER DEFAULT 0,
-        opponent_score INTEGER DEFAULT 0,
-        current_q_idx INTEGER DEFAULT 0,
-        status TEXT DEFAULT 'pending'
-    )
-    ''')
     conn.commit()
     
-    # Check if empty
     cursor.execute('SELECT COUNT(*) FROM questions')
     if cursor.fetchone()[0] == 0:
         if os.path.exists(QUESTIONS_JSON):
@@ -175,6 +172,40 @@ def init_db():
             ''', records)
             conn.commit()
 
+    conn.close()
+
+def save_channel_poll_mapping(poll_id, question_id, display_num, message_id, correct_option_id):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('''
+    INSERT OR REPLACE INTO channel_polls (poll_id, question_id, display_num, message_id, correct_option_id, comment_posted)
+    VALUES (?, ?, ?, ?, ?, 0)
+    ''', (str(poll_id), question_id, display_num, message_id, correct_option_id))
+    conn.commit()
+    conn.close()
+
+def get_channel_poll_mapping(poll_id):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('SELECT poll_id, question_id, display_num, message_id, correct_option_id, comment_posted FROM channel_polls WHERE poll_id = ?', (str(poll_id),))
+    row = cursor.fetchone()
+    conn.close()
+    if row:
+        return {
+            'poll_id': row[0],
+            'question_id': row[1],
+            'display_num': row[2],
+            'message_id': row[3],
+            'correct_option_id': row[4],
+            'comment_posted': row[5]
+        }
+    return None
+
+def mark_channel_poll_comment_posted(poll_id):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('UPDATE channel_polls SET comment_posted = 1 WHERE poll_id = ?', (str(poll_id),))
+    conn.commit()
     conn.close()
 
 def get_channel_last_id():
@@ -359,30 +390,6 @@ def search_questions(keyword, limit=5):
         })
     return results
 
-def set_exam_date(user_id, exam_type, exam_date):
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute('INSERT OR REPLACE INTO exam_dates (user_id, exam_type, exam_date) VALUES (?, ?, ?)',
-                   (user_id, exam_type, exam_date))
-    conn.commit()
-    conn.close()
-
-def get_exam_date(user_id):
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute('SELECT exam_type, exam_date FROM exam_dates WHERE user_id = ?', (user_id,))
-    row = cursor.fetchone()
-    conn.close()
-    return row
-
-def get_all_exam_dates():
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute('SELECT user_id, exam_type, exam_date FROM exam_dates')
-    rows = cursor.fetchall()
-    conn.close()
-    return rows
-
 if __name__ == '__main__':
     init_db()
-    print("Database functions loaded.")
+    print("Database functions loaded with Persistent Channel Polls table.")
