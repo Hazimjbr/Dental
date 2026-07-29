@@ -5,6 +5,36 @@ import os
 DB_PATH = os.path.join(os.path.dirname(__file__), 'dental_bot.db')
 QUESTIONS_JSON = os.path.join(os.path.dirname(__file__), 'full_1000_mcqs.json')
 
+def categorize_question(q_text):
+    text_lower = q_text.lower()
+    if any(k in text_lower for k in ['nerve', 'abscess', 'surgery', 'extraction', 'flap', 'sinus', 'fracture', 'trauma', 'suture', 'lesion', 'carcinoma']):
+        return "Oral Surgery & Pathology"
+    elif any(k in text_lower for k in ['canal', 'pulp', 'endodontic', 'amalgam', 'gic', 'composite', 'cavity', 'caries', 'dentin', 'enamel']):
+        return "Restorative & Endodontics"
+    elif any(k in text_lower for k in ['periodontal', 'gingival', 'calculus', 'pocket', 'plaque', 'hygiene', 'scaling']):
+        return "Periodontics"
+    elif any(k in text_lower for k in ['denture', 'impression', 'crown', 'bridge', 'x-ray', 'radiograph', 'cast', 'occlusion', 'abutment']):
+        return "Prosthodontics & Radiology"
+    elif any(k in text_lower for k in ['penicillin', 'diazepam', 'sedation', 'fluoride', 'anaesthesia', 'drug', 'antibiotic', 'steroid', 'cirrhosis']):
+        return "Pharmacology & General Medicine"
+    else:
+        return "General Dentistry"
+
+def calculate_difficulty_level(q_text, options_list):
+    text_len = len(q_text)
+    text_lower = q_text.lower()
+    num_options = len(options_list) if isinstance(options_list, list) else 4
+    
+    # Clinical complexity keywords for Level 3
+    complexity_keywords = ['emergency', 'management', 'contraindicated', 'diagnose', 'syndrome', 'carcinoma', 'pathognomonic', 'complication']
+    
+    if num_options >= 5 or text_len > 180 or any(k in text_lower for k in complexity_keywords):
+        return "Level 3"
+    elif text_len < 90 and num_options <= 4:
+        return "Level 1"
+    else:
+        return "Level 2"
+
 def init_db():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
@@ -69,7 +99,82 @@ def init_db():
     ''')
     cursor.execute('INSERT OR IGNORE INTO channel_settings (key, value) VALUES ("last_channel_q_id", "0")')
     cursor.execute('INSERT OR IGNORE INTO channel_settings (key, value) VALUES ("channel_post_count", "0")')
+    
+    # 6. Weekly stats Table
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS weekly_stats (
+        user_id INTEGER,
+        week_start TEXT,
+        total_answered INTEGER DEFAULT 0,
+        correct_answers INTEGER DEFAULT 0,
+        PRIMARY KEY (user_id, week_start)
+    )
+    ''')
+    
+    # 7. Pearls Table
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS pearls (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        pearl_text TEXT NOT NULL,
+        category TEXT,
+        reference TEXT,
+        posted INTEGER DEFAULT 0
+    )
+    ''')
+    
+    # 8. Exam dates Table
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS exam_dates (
+        user_id INTEGER PRIMARY KEY,
+        exam_type TEXT,
+        exam_date TEXT
+    )
+    ''')
+    
+    # 9. Challenger sessions Table
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS challenger_sessions (
+        session_id TEXT PRIMARY KEY,
+        challenger_id INTEGER,
+        opponent_id INTEGER,
+        questions_json TEXT,
+        challenger_score INTEGER DEFAULT 0,
+        opponent_score INTEGER DEFAULT 0,
+        current_q_idx INTEGER DEFAULT 0,
+        status TEXT DEFAULT 'pending'
+    )
+    ''')
     conn.commit()
+    
+    # Check if empty
+    cursor.execute('SELECT COUNT(*) FROM questions')
+    if cursor.fetchone()[0] == 0:
+        if os.path.exists(QUESTIONS_JSON):
+            with open(QUESTIONS_JSON, 'r', encoding='utf-8') as f:
+                qs = json.load(f)
+            
+            records = []
+            for q in qs:
+                cat = categorize_question(q['question'])
+                lvl = calculate_difficulty_level(q['question'], q['options'])
+                corr_idx = q['correct_option_id'] if q['correct_option_id'] is not None else 0
+                records.append((
+                    q['id'],
+                    q['question'],
+                    json.dumps(q['options'], ensure_ascii=False),
+                    q.get('correct_letter', 'A'),
+                    corr_idx,
+                    q.get('explanation', ''),
+                    cat,
+                    lvl
+                ))
+            
+            cursor.executemany('''
+            INSERT INTO questions (id, question, options_json, correct_letter, correct_option_id, explanation, category, level)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            ''', records)
+            conn.commit()
+
     conn.close()
 
 def get_channel_last_id():
@@ -121,7 +226,6 @@ def get_next_available_id(last_id):
     if row:
         return row[0]
     
-    # Loop back to absolute first question in DB
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute('SELECT id FROM questions ORDER BY id ASC LIMIT 1')
@@ -281,4 +385,4 @@ def get_all_exam_dates():
 
 if __name__ == '__main__':
     init_db()
-    print("Database functions corrected with display count.")
+    print("Database functions loaded.")

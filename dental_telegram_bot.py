@@ -61,12 +61,23 @@ def api_call(method, payload=None):
     if payload:
         data = urllib.parse.urlencode(payload).encode('utf-8')
     req = urllib.request.Request(url, data=data)
-    try:
-        with urllib.request.urlopen(req) as resp:
-            return json.loads(resp.read().decode('utf-8'))
-    except Exception as e:
-        print(f"API Error [{method}]:", e)
-        return None
+    
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(req) as resp:
+                return json.loads(resp.read().decode('utf-8'))
+        except urllib.error.HTTPError as e:
+            if e.code == 429:
+                print("Rate limit hit (429). Sleeping 10 seconds...")
+                time.sleep(10)
+                continue
+            else:
+                print(f"API Error [{method}]:", e)
+                return None
+        except Exception as e:
+            print(f"API Connection Error [{method}]:", e)
+            return None
+    return None
 
 def send_message(chat_id, text, reply_markup=None):
     payload = {
@@ -103,9 +114,10 @@ def send_quiz_poll(chat_id, question_data, is_anonymous=True, display_num=None):
     
     raw_exp = question_data.get('explanation', '')
     if raw_exp:
-        exp_text = f"💡 Explanation: {raw_exp}"[:200]
+        # Wrap explanation in HTML tg-spoiler tags for animated hidden text
+        exp_text = f"💡 <b>Clinical Explanation:</b> <tg-spoiler>{raw_exp}</tg-spoiler>"[:200]
     else:
-        exp_text = f"💡 Correct option is: {correct_option_text}. Reference: Master Dentistry."[:200]
+        exp_text = f"💡 <b>Explanation:</b> <tg-spoiler>Correct choice is: {correct_option_text}. Reference: Master Dentistry.</tg-spoiler>"[:200]
 
     payload = {
         'chat_id': chat_id,
@@ -114,6 +126,7 @@ def send_quiz_poll(chat_id, question_data, is_anonymous=True, display_num=None):
         'type': 'quiz',
         'correct_option_id': new_correct_id,
         'explanation': exp_text,
+        'explanation_parse_mode': 'HTML',
         'is_anonymous': is_anonymous
     }
     
@@ -131,13 +144,14 @@ def post_next_channel_question():
     next_id = get_next_available_id(last_id)
     q = get_question_by_id(next_id)
     
-    display_num = increment_channel_post_count()
+    next_display = get_channel_post_count() + 1
     
-    res = send_quiz_poll(CHANNEL_ID, q, is_anonymous=True, display_num=display_num)
+    res = send_quiz_poll(CHANNEL_ID, q, is_anonymous=True, display_num=next_display)
     if res and res.get('ok'):
+        increment_channel_post_count()
         update_channel_last_id(next_id)
-        print(f" Successfully posted Question #{next_id} (Displayed as #{display_num}) to {CHANNEL_ID}")
-        return display_num
+        print(f" Successfully posted Question #{next_id} (Displayed as #{next_display}) to {CHANNEL_ID}")
+        return next_display
     return None
 
 def get_main_keyboard():
@@ -234,7 +248,7 @@ def handle_channel_info(chat_id):
 
 def run_bot():
     init_db()
-    print("Dental Telegram Quiz Bot is NOW LIVE (Secrets Isolated)!")
+    print("Dental Telegram Quiz Bot is NOW LIVE (Spoiler Explanation & Balanced Levels)!")
     offset = 0
     
     while True:
@@ -255,6 +269,20 @@ def run_bot():
                             info = poll_question_map[p_id]
                             is_corr = (chosen == info['correct_option_id'])
                             log_user_answer(u_id, info['question_id'], chosen, is_corr)
+                            
+                            q_data = get_question_by_id(info['question_id'])
+                            if q_data:
+                                corr_idx = info['correct_option_id']
+                                corr_text = q_data['options'][corr_idx] if corr_idx < len(q_data['options']) else ""
+                                status_emoji = "✅" if is_corr else "❌"
+                                
+                                exp_msg = (
+                                    f"{status_emoji} *Explanation Alert*\n"
+                                    f"━━━━━━━━━━━━━━━━━━━━━━\n"
+                                    f"💡 *Correct Choice:* {corr_text}\n\n"
+                                    f"📖 *Clinical Explanation:*\n{q_data['explanation']}"
+                                )
+                                send_message(u_id, exp_msg)
                     
                     if 'message' in update and 'text' in update['message']:
                         msg = update['message']
