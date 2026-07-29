@@ -1,0 +1,4 @@
+{
+  "summary": "A script to delete incorrectly posted channel questions, reset pointers, and republish Q1-Q50 with a safe 3.5s delay to avoid 429 rate limits.",
+  "updatedAt": "2026-07-29T06:47:11.744512Z"
+}
