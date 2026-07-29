@@ -79,14 +79,16 @@ def api_call(method, payload=None):
             return None
     return None
 
-def send_message(chat_id, text, reply_markup=None):
+def send_message(chat_id, text, reply_markup=None, reply_to_message_id=None, parse_mode='HTML'):
     payload = {
         'chat_id': chat_id,
         'text': text,
-        'parse_mode': 'Markdown'
+        'parse_mode': parse_mode
     }
     if reply_markup:
         payload['reply_markup'] = json.dumps(reply_markup)
+    if reply_to_message_id:
+        payload['reply_to_message_id'] = reply_to_message_id
     return api_call('sendMessage', payload)
 
 def send_quiz_poll(chat_id, question_data, is_anonymous=True, display_num=None):
@@ -114,7 +116,6 @@ def send_quiz_poll(chat_id, question_data, is_anonymous=True, display_num=None):
     
     raw_exp = question_data.get('explanation', '')
     if raw_exp:
-        # Wrap primary clinical explanation in tg-spoiler
         exp_text = f"💡 <b>Clinical Explanation:</b> <tg-spoiler>{raw_exp[:140]}</tg-spoiler>"[:200]
     else:
         exp_text = f"💡 <b>Explanation:</b> <tg-spoiler>Correct choice is: {correct_option_text}. Reference: Master Dentistry.</tg-spoiler>"[:200]
@@ -148,9 +149,19 @@ def post_next_channel_question():
     
     res = send_quiz_poll(CHANNEL_ID, q, is_anonymous=True, display_num=next_display)
     if res and res.get('ok'):
+        poll_msg_id = res['result']['message_id']
         increment_channel_post_count()
         update_channel_last_id(next_id)
-        print(f" Successfully posted Question #{next_id} (Displayed as #{next_display}) to {CHANNEL_ID}")
+        
+        # Post automatic deep clinical reference comment under the poll
+        comment_text = (
+            f"📖 <b>Deep Clinical Reference — Question #{next_display}</b>\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━\n"
+            f"{q['explanation']}"
+        )
+        send_message(CHANNEL_ID, comment_text, reply_to_message_id=poll_msg_id, parse_mode='HTML')
+        
+        print(f" Successfully posted Question #{next_id} (Displayed as #{next_display}) with auto-comment to {CHANNEL_ID}")
         return next_display
     return None
 
@@ -167,14 +178,14 @@ def get_main_keyboard():
 def handle_start(chat_id, user_id, first_name, username):
     get_user(user_id, username, first_name)
     welcome_text = (
-        f"🦷 *Welcome Dr. {first_name} to Dental MCQs Platform!*\n\n"
+        f"🦷 <b>Welcome Dr. {first_name} to Dental MCQs Platform!</b>\n\n"
         f"Designed to help you master board exams (ORE, MFDs, MJDF) efficiently.\n\n"
-        f"📌 *Platform Features:*\n"
-        f"• 🎯 *910 Board Questions* categorized with full book references.\n"
-        f"• 🔴 *Mistakes Deck:* Auto-saves missed questions for targeted review.\n"
-        f"• 🏷️ *Specialties & Levels:* Filter by subject and difficulty.\n"
-        f"• ⏩ *Progress Tracking:* Automatically resumes from where you left off.\n"
-        f"• 📢 *Official Channel:* {CHANNEL_ID}\n\n"
+        f"📌 <b>Platform Features:</b>\n"
+        f"• 🎯 <b>910 Board Questions</b> categorized with full book references.\n"
+        f"• 🔴 <b>Mistakes Deck:</b> Auto-saves missed questions for targeted review.\n"
+        f"• 🏷️ <b>Specialties & Levels:</b> Filter by subject and difficulty.\n"
+        f"• ⏩ <b>Progress Tracking:</b> Automatically resumes from where you left off.\n"
+        f"• 📢 <b>Official Channel:</b> {CHANNEL_ID}\n\n"
         f"Select an option below to start practicing 👇"
     )
     send_message(chat_id, welcome_text, reply_markup=get_main_keyboard())
@@ -190,21 +201,21 @@ def handle_next_quiz(chat_id, user_id):
 def handle_mistakes(chat_id, user_id):
     mistakes = get_pending_mistakes(user_id)
     if not mistakes:
-        send_message(chat_id, "🌟 *Excellent!* You currently have no pending mistakes in your review deck.")
+        send_message(chat_id, "🌟 <b>Excellent!</b> You currently have no pending mistakes in your review deck.")
     else:
         q = mistakes[0]
-        send_message(chat_id, f"🔴 *Reviewing Mistakes ({len(mistakes)} remaining):*")
+        send_message(chat_id, "🔴 <b>Reviewing Mistakes:</b>")
         send_quiz_poll(chat_id, q, is_anonymous=False)
 
 def handle_categories_menu(chat_id):
     cats_text = (
-        "🏷️ *Available Dental Specialties & Hashtags:*\n\n"
-        "1️⃣ 🔪 *Oral Surgery & Pathology* (`#Oral_Surgery`)\n"
-        "2️⃣ 🦷 *Restorative & Endodontics* (`#Endodontics`)\n"
-        "3️⃣ 🩺 *Periodontics* (`#Periodontics`)\n"
-        "4️⃣ 📸 *Prosthodontics & Radiology* (`#Prosthodontics`)\n"
-        "5️⃣ 💊 *Pharmacology & Medicine* (`#Pharmacology`)\n\n"
-        "💡 *Tip:* In the channel, tap any hashtag to view all questions for that sub-specialty instantly!"
+        "🏷️ <b>Available Dental Specialties & Hashtags:</b>\n\n"
+        "1️⃣ 🔪 <b>Oral Surgery & Pathology</b> (<code>#Oral_Surgery</code>)\n"
+        "2️⃣ 🦷 <b>Restorative & Endodontics</b> (<code>#Endodontics</code>)\n"
+        "3️⃣ 🩺 <b>Periodontics</b> (<code>#Periodontics</code>)\n"
+        "4️⃣ 📸 <b>Prosthodontics & Radiology</b> (<code>#Prosthodontics</code>)\n"
+        "5️⃣ 💊 <b>Pharmacology & Medicine</b> (<code>#Pharmacology</code>)\n\n"
+        "💡 <b>Tip:</b> In the channel, tap any hashtag to view all questions for that sub-specialty instantly!"
     )
     send_message(chat_id, cats_text)
 
@@ -217,39 +228,39 @@ def handle_stats(chat_id, user_id, first_name):
     mistakes_count = len(get_pending_mistakes(user_id))
     
     stats_text = (
-        f"📊 *Progress Dashboard for Dr. {first_name}:*\n\n"
-        f"📍 *Last Question Reached:* #{last_q_id} / 910\n"
-        f"📝 *Total Questions Answered:* {total_ans}\n"
-        f"✅ *Correct Answers:* {correct_ans}\n"
-        f"🎯 *Accuracy Rate:* {accuracy:.1f}%\n"
-        f"🔴 *Pending Mistakes:* {mistakes_count}\n\n"
+        f"📊 <b>Progress Dashboard for Dr. {first_name}:</b>\n\n"
+        f"📍 <b>Last Question Reached:</b> #{last_q_id} / 910\n"
+        f"📝 <b>Total Questions Answered:</b> {total_ans}\n"
+        f"✅ <b>Correct Answers:</b> {correct_ans}\n"
+        f"🎯 <b>Accuracy Rate:</b> {accuracy:.1f}%\n"
+        f"🔴 <b>Pending Mistakes:</b> {mistakes_count}\n\n"
         f"Keep practicing daily to build your exam readiness! 💪"
     )
     send_message(chat_id, stats_text)
 
 def handle_search_prompt(chat_id):
-    send_message(chat_id, "🔍 *Search Dental MCQs Database:*\nType `/search` followed by your keyword.\nExample:\n`/search amalgam`\n`/search GIC`\n`/search nerve`")
+    send_message(chat_id, "🔍 <b>Search Dental MCQs Database:</b>\nType <code>/search</code> followed by your keyword.\nExample:\n<code>/search amalgam</code>\n<code>/search GIC</code>\n<code>/search nerve</code>")
 
 def execute_search(chat_id, query):
     results = search_questions(query, limit=3)
     if not results:
-        send_message(chat_id, f"❌ No questions found matching: `{query}`")
+        send_message(chat_id, f"❌ No questions found matching: <code>{query}</code>")
     else:
-        send_message(chat_id, f"🔍 *Search Results for ({query}):*")
+        send_message(chat_id, f"🔍 <b>Search Results for ({query}):</b>")
         for q in results:
             send_quiz_poll(chat_id, q, is_anonymous=False)
 
 def handle_channel_info(chat_id):
     info = (
-        f"📢 *Official Dental Board Practice Channel:*\n{CHANNEL_ID}\n\n"
+        f"📢 <b>Official Dental Board Practice Channel:</b>\n{CHANNEL_ID}\n\n"
         f"Interactive quizzes with clinical explanations are posted daily!\n"
-        f"👉 [Click here to launch Private Practice Bot](https://t.me/dentistry_quiz_bot)"
+        f"👉 <a href=\"https://t.me/dentistry_quiz_bot\">Click here to launch Private Practice Bot</a>"
     )
     send_message(chat_id, info)
 
 def run_bot():
     init_db()
-    print("Dental Telegram Quiz Bot is NOW LIVE (Unlimited Deep Chat References Enabled)!")
+    print("Dental Telegram Quiz Bot is NOW LIVE (Auto-Comment Deep References Enabled)!")
     offset = 0
     
     while True:
@@ -277,11 +288,10 @@ def run_bot():
                                 corr_text = q_data['options'][corr_idx] if corr_idx < len(q_data['options']) else ""
                                 status_emoji = "✅ Correct" if is_corr else "❌ Incorrect"
                                 
-                                # Send full, untruncated 3-part reference & study link message in private chat
                                 exp_msg = (
-                                    f"{status_emoji} *Answer Analysis*\n"
+                                    f"{status_emoji} <b>Answer Analysis</b>\n"
                                     f"━━━━━━━━━━━━━━━━━━━━━━\n"
-                                    f"🎯 *Correct Option:* `{corr_text}`\n\n"
+                                    f"🎯 <b>Correct Option:</b> <code>{corr_text}</code>\n\n"
                                     f"{q_data['explanation']}"
                                 )
                                 send_message(u_id, exp_msg)
