@@ -1,0 +1,340 @@
+Q126:
+Question: When repairing a fracture of lower complete denture. Which statement is correct:
+Options: ["Self curing will distort the denture", "Cold curing will not be strong enough because of small area of attachment", "There is a possibility of occlusal disharmony"]
+Correct: 2
+
+Q127:
+Question: In regards to Electrical Vitalometer:
+Options: ["To test recently erupted teeth", "Check response for an electrical stimulant", "Reveal potential necrosis"]
+Correct: 1
+
+Q128:
+Question: When preparing class III for composite restoration; which situation acid itching should be placed:
+Options: ["Always should be performed to minimise marginal leakage", "Should not be performed because it might damage the adjacent tooth", "When extra retention is required", "Only in situations where cavity is shallow to avoid pulp irritation"]
+Correct: 0
+
+Q129:
+Question: In which situation the translucency of a tooth is lost:
+Options: ["Death of the pulp", "Complete calcification of pulp chamber", "Hyperaemia", "Pulp stone", "All of the above"]
+Correct: 4
+
+Q130:
+Question: Which pin system has proven to be the most retentive
+Options: ["Self tapping threaded pin", "Friction peak pin", "Cemented pin"]
+Correct: 0
+
+Q131:
+Question: Reconstructing the occlusal anatomy is based on:
+Options: ["Functional factors", "Depth of restoration on a tooth", "Necessity to restore normal anatomy"]
+Correct: 0
+
+Q132:
+Question: How do you prepare floor of pulp chamber in molars:
+Options: ["Swab and dry with cotton wool and excavate", "Use round bur to flatten the floor", "Under cut walls", "Use flat end fissure bur to make it levelled"]
+Correct: 0
+
+Q133:
+Question: When do you finish campsite resin restorations:
+Options: ["Immediately after curing", "After 24 hours", "A week after placement"]
+Correct: 0
+
+Q134:
+Question: Where Café au lait spots are seen:
+Options: ["Von Willebrand’s disease", "Recklinghausen", "Neurofibroma"]
+Correct: 1
+
+Q135:
+Question: Von Willebrand disease is,
+Options: ["Haemophilic disease", "Bacterial Endocarditis", "Congenital cardiac disease", "Rheumatic fever"]
+Correct: 0
+
+Q136:
+Question: What technique is used in the extraction of permanent 1st molars:
+Options: ["Rotation movement", "Lingual movement", "Buccal movement"]
+Correct: 2
+
+Q137:
+Question: Drugs contraindicated with Monoaminoxidas MAO
+Options: ["Barbiturates", "Pethidine", "Local Anaesthesia with felypressin", "Narcotic analgetics", "Salicylic acid"]
+Correct: 1
+
+Q138:
+Question: Blow to mandible causing fracture in molar’s right side region, you expect a second fracture of:
+Options: ["Sub condylar of right side", "Sub-condylar of left side", "Fracture of symphysis"]
+Correct: 1
+
+Q139:
+Question: What is the most common fracture of Class II amalgam restorations:
+Options: ["Isthmus because of insufficient depth", "Internal fracture", "Marginal ridge site"]
+Correct: 0
+
+Q140:
+Question: What is the advantage of composite over silicate resin:
+Options: ["Less shrinkage", "Less surface erosion", "Less water absorption", "All of the above"]
+Correct: 3
+
+Q141:
+Question: The setting expansion of casting investment is approximately
+Options: ["0 to 0.1%", "0.1 to 0.5%", "0.5 to 1%", "1.1 to 1.6%"]
+Correct: 1
+
+Q142:
+Question: The contraction of gold alloys on solidifying is approximately:
+Options: ["0.5%", "2.5%", "1.40%", "3%"]
+Correct: 2
+
+Q143:
+Question: The un-polymerized monomer in Self-cured resin is approximately:**
+Options: ["0.5%", "2.5%", "5%", "10%"]
+Correct: 2
+
+Q144:
+Question: A volume shrinkage of methyl meta cyrelate monomer when is polymerized:**
+Options: ["12%", "15%", "18%", "21%"]
+Correct: 3
+
+Q145:
+Question: Treatment of fibrous dysplasia consists of,
+Options: ["Resection", "Complete excision if it affects small area; if it is large lesion, limited excision surgery because of the cosmetic considerations.", "Irradiation", "Excision and removal of adjacent teeth", "None of the above"]
+Correct: 1
+
+Q146:
+Question: Treatment of all of Giant Cell lesion either salivary or multiple is,
+Options: ["Marsupialization", "In velation and packing ap??", "Cold well??", "Surgical curettage", "None of the above"]
+Correct: 3
+
+Q147:
+Question: Oil or water on impression for treatment casts causes:
+Options: ["An increase of the quality", "No alteration", "A decrease of the quality", "Bubbles on the cast", "None of the above"]
+Correct: 2
+
+Q148:
+Question: What is Path of Insertion
+Options: ["The movement of the appliance from the points of initial contacts to path of final rest position", "The movement of the appliance from the points of rest position until it is not in contact with teeth"]
+Correct: 0
+
+Q149:
+Question: What is Path of Removal:
+Options: ["The appliances movement from the rest position to the last contacts of its rigid parts with the supporting teeth", "The movement of the appliance from the points of initial contacts to path of final rest position"]
+Correct: 0
+
+Q150:
+Question: When correction preparation for re contouring of occlusal surface is to be applied. Grinding only of the adjusted surface:
+Options: ["Should not be felt flat", "Require a flat crown", "Require no contact with adjacent teeth", "Should be felt flat", "None of the above"]
+Correct: 0
+
+Q151:
+Question: To obtain a desired projection of occlusal loads, the floor of the occlusal rest should,
+Options: ["Be convex", "Slope from the marginal ridge towards Contact?? of abutment", "Slope from Contact?? of abutment towards the marginal ridge", "Be concave", "Does not slope from the marginal ridge towards Contact?? of abutment F. None of the above"]
+Correct: 3
+
+Q152:
+Question: The transfer of stress by Tensile Action employs T. reaction; a process that within limit:
+Options: ["Fails to promote bone growth", "Promote bone growth and maintenance", "Fails to promote maintenance", "None of the above"]
+Correct: 1
+
+Q153:
+Question: Which of the following arrears CAN NOT be determined by survey analysis of partially edentulous cast?
+Options: ["Areas to be revealed as blocked out to properly loca?? Rigid parts of a frame work", "Areas to be shaped to properly loc?? Rigid parts of framework", "Areas used for guideline planes", "Areas used for retention", "Areas used for support F. Depth of rest seats"]
+Correct: 0
+
+Q154:
+Question: In partial dentures the guidelines “Guiding Planes” serve to:
+Options: ["Aids in balancing occlusion", "Assure predictable clasp retention", "Form right angle with the occlusal plane", "Eliminate the necessity for precision attachment", "Eliminate the necessity for a posterior clasp"]
+Correct: 1
+
+Q155:
+Question: Rough surface of porcelain /Porosity/ is a result of:
+Options: ["Lack of compression", "Sudden high temperature"]
+Correct: 0
+
+Q156:
+Question: The most common failure in constructing porcelain to metal is:
+Options: ["Improper metal framework", "Rapid heating"]
+Correct: 0
+
+Q157:
+Question: Prolong GIC’s setting time can be achieved by,
+Options: ["Cool down the slab", "Increase the amount of distilled water"]
+Correct: 0
+
+Q158:
+Question: The maxillary canine is missing. The best way for making Cantilever bridge:
+Options: ["Both premolars", "Incisors and premolars"]
+Correct: 0
+
+Q160:
+Question: Why would you decide to replace the anterior missing teeth for partial denture using bridge:
+Options: ["Aesthetic", "Overjet", "Overbite"]
+Correct: 0
+
+Q161:
+Question: In regards to Gold casting alloys which one is available for bridge
+Options: ["Hard alloy “Type III”", "Type II", "Type I"]
+Correct: 0
+
+Q162:
+Question: Using fluoride in the root surface caries is to protect,
+Options: ["Enamel", "Dentine and cementum", "Cuticle"]
+Correct: 1
+
+Q163:
+Question: The first thing to check when patient comes complaining of pain under denture is:
+Options: ["Occlusion", "Soft tissues changes"]
+Correct: 0
+
+Q164:
+Question: Fovea Palatini, is a landmark to determine the posterior bonds of upper denture:
+Options: ["Post dam", "Flanges"]
+Correct: 0
+
+Q165:
+Question: Attrition is,
+Options: ["Process of normal wear of teeth", "Lost of teeth substance as a result of chemical exposure"]
+Correct: 0
+
+Q166:
+Question: Modulus of elasticity is defined as:
+Options: ["The stress at the proportional limit", "The stress-strain ratio within the proportional limit"]
+Correct: 1
+
+Q167:
+Question: Tissue conditioning material : (Silicon lining material)
+Options: ["Are more resilient than plastic acrylic", "Can minimise any bacterial colonies"]
+Correct: 0
+
+Q168:
+Question: The most common cause of RCT “Root Canal Treatment” failure is:
+Options: ["The canal not filled completely (Short obturation)", "Over filled canals"]
+Correct: 0
+
+Q169:
+Question: The position of cusps of maxillary first premolar during setting of teeth and on occlusal view is positioned:**
+Options: ["Distally", "Mesially", "Central buccolingually"]
+Correct: 1
+
+Q170:
+Question: Lateral canals are usually found:
+Options: ["The middle of the root", "Fist third of the root close to the crown", "The apical third"]
+Correct: 2
+
+Q172:
+Question: Transillumination is used to :**
+Options: ["To find intrinsic tooth colouration", "To detect caries", "Pulp-stones", "Hemorrhagic pulp", "Calculus"]
+Correct: 1
+
+Q173:
+Question: What is the common malignant lesion that occurs in the oral cavity:
+Options: ["Ameloblastoma", "Squamous cell carcinoma", "Osteosarcoma"]
+Correct: 1
+
+Q174:
+Question: Replantation of avulsed tooth 2 ½ hours after incident; the most likely diagnosis is,
+Options: ["External resorption", "Internal resorption", "Pulp stones"]
+Correct: 0
+
+Q175:
+Question: The emergency treatment for painless necrotic pulp is:
+Options: ["Drainage through canals", "None"]
+Correct: 1
+
+Q176:
+Question: Swelling after RCT is mainly caused by “Being asked as What is the most frequent cause of pain which occurs several days after obturation” too:
+Options: ["Entrapped Bacteria, or the presence of bacteria in the periapical region.", "Under filling the root canal system", "Over filled root canal"]
+Correct: 0
+
+Q177:
+Question: How do you treat dentine before applying GIC
+Options: ["Conditioner", "Pumice & water"]
+Correct: 1
+
+Q178:
+Question: The first step in the treatment of erosion is:
+Options: ["Pumice and water", "Spray with Na-bicarbonate", "GIC"]
+Correct: 0
+
+Q180:
+Question: Why do you polish the teeth before seating of partial dentures:
+Options: ["To smooth the rough surface", "To minimise the retention of plaque", "To increase the adoptability of occlusal rests"]
+Correct: 2
+
+Q181:
+Question: The contact between artificial and natural teeth in partial dentures:
+Options: ["Slight touch in the balancing side", "Should not be in touch at all."]
+Correct: 0
+
+Q182:
+Question: Polyvinyl impression material are,
+Options: ["The most stable", "The most resistant to heat"]
+Correct: 0
+
+Q183:
+Question: To remove the pulp tissue from narrow canal, you can use:
+Options: ["Barbed broach", "Small K-Type file", "Smooth broach", "Reamer"]
+Correct: 1
+
+Q184:
+Question: Wax patterns ARE NOT to be left on the bench for long time because of,
+Options: ["Distortion", "Lost of elasticity"]
+Correct: 0
+
+Q185:
+Question: The undercut for Cobalt Chrome’s retentive arm clasp is,
+Options: ["0.75mm", "0.50mm", "0.25mm"]
+Correct: 2
+
+Q188:
+Question: Gold clasp is more elastic than Cobalt Chrome, but Co-Chrome has high modulus of elasticity
+Options: ["The first statement is false the second is true", "Both are true", "The first is true the second is false", "Both are false"]
+Correct: 1
+
+Q189:
+Question: Overdentures are best used for,
+Options: ["Canines and premolars", "Posterior teeth"]
+Correct: 0
+
+Q190:
+Question: What is main reason of ordering another Periapical radiograph of the same tooth:
+Options: ["To disclose the other roots", "To observe tooth from different angle"]
+Correct: 0
+
+Q191:
+Question: The ideal length of RCT is,
+Options: ["At the apex", "As far as you can obturate", "0.5 t0 1.5 mm before the apex"]
+Correct: 2
+
+Q192:
+Question: Retentive part of clasp position is,
+Options: ["Below the survey line.", "Above survey line", "As close as possible to the gingival margins"]
+Correct: 0
+
+Q193:
+Question: To minimize the load on free end saddle partial denture:
+Options: ["Use teeth with narrow Buccal-Lingual dimension", "Use mucco-compressive impression"]
+Correct: 0
+
+Q194:
+Question: Retentive Clasps:
+Options: ["Alloy with high modulus of elasticity", "Clasp arm is gingivally located"]
+Correct: 1
+
+Q195:
+Question: Internal resorption of RC usually
+Options: ["Asymptomatic", "Painful"]
+Correct: 0
+
+Q196:
+Question: When doing pulpotomy with Formcresol, you will find:
+Options: ["Necrosis", "Mummification"]
+Correct: 1
+
+Q197:
+Question: Ledermix used in RCT to relieve pain because of,
+Options: ["Antibiotics", "Corticosteroid"]
+Correct: 1
+
+Q199:
+Question: The technique of placing Gutta-Percha cones against the root canal walls providing space for additional Gutta Percha is termed:
+Options: ["Lateral Condensation", "One major Gutta Percha point", "Laterally above condensed"]
+Correct: 0
+
