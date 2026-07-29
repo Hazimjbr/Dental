@@ -93,30 +93,38 @@ def send_message(chat_id, text, reply_markup=None, reply_to_message_id=None, par
 
 def format_compact_explanation(raw_exp, correct_option_text):
     if not raw_exp:
-        return f"💡 Correct: {correct_option_text[:50]}. Ref: Master Dentistry."[:195]
+        return f"💡 Correct choice: {correct_option_text[:40]}. Ref: Master Dentistry."[:195]
         
     parts = raw_exp.split('\n\n')
-    main_text = parts[0].strip()
+    main_sentence = parts[0].strip()
     
+    # Remove parenthetical clauses if text is too long to fit cleanly without trailing '...'
+    if len(main_sentence) > 95:
+        main_sentence = re.sub(r'\s*\([^)]*\)', '', main_sentence).strip()
+        
+    # Pick first complete sentence
+    first_period = main_sentence.find('.')
+    if first_period > 20 and first_period < 110:
+        main_sentence = main_sentence[:first_period + 1]
+    elif len(main_sentence) > 105:
+        main_sentence = main_sentence[:102].rsplit(' ', 1)[0] + '.'
+
     ref_text = ''
     link_text = ''
     
     for p in parts[1:]:
         if 'Book Reference:' in p:
-            ref_text = p.replace('Book Reference:', '').strip()
+            ref_text = p.replace('Book Reference:', '').replace('🏛️', '').strip()
         elif 'Study Link:' in p:
-            link_text = p.replace('Study Link:', '').strip()
+            link_text = p.replace('Study Link:', '').replace('🔗', '').strip()
             
-    if len(main_text) > 90:
-        main_text = main_text[:87] + '...'
-        
-    res = f"💡 {main_text}"
+    res = f"💡 {main_sentence}"
     if ref_text:
-        ref_short = ref_text.replace('Master Dentistry ', 'MasterDent ').strip()
-        res += f"\n🏛️ {ref_short}"
+        ref_clean = ref_text.replace('Master Dentistry ', 'MasterDent ').strip()
+        res += f"\n🏛️ {ref_clean}"
     if link_text:
-        link_short = re.sub(r'^https?://(www\.)?', '', link_text).strip()
-        res += f"\n🔗 {link_short}"
+        link_clean = link_text.replace('https://www.', '').replace('https://', '').strip()
+        res += f"\n🔗 {link_clean}"
         
     return res[:195]
 
@@ -174,7 +182,7 @@ def post_next_channel_question():
     if res and res.get('ok'):
         increment_channel_post_count()
         update_channel_last_id(next_id)
-        print(f" Successfully posted Compact Native Question #{next_id} (Displayed as #{next_display}) to {CHANNEL_ID}")
+        print(f" Successfully posted Perfect Sentence Question #{next_id} (Displayed as #{next_display}) to {CHANNEL_ID}")
         return next_display
     return None
 
@@ -273,7 +281,7 @@ def handle_channel_info(chat_id):
 
 def run_bot():
     init_db()
-    print("Dental Telegram Quiz Bot is NOW LIVE (Compact Native Explanation with Links & Refs)!")
+    print("Dental Telegram Quiz Bot is NOW LIVE (Perfect Complete Sentence Formatting)!")
     offset = 0
     
     while True:
