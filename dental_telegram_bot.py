@@ -116,9 +116,10 @@ def send_quiz_poll(chat_id, question_data, is_anonymous=True, display_num=None):
     
     raw_exp = question_data.get('explanation', '')
     if raw_exp:
-        exp_text = f"💡 <b>Clinical Explanation:</b> <tg-spoiler>{raw_exp[:140]}</tg-spoiler>"[:200]
+        # Clean, unblurred text inside lightbulb popup
+        exp_text = f"💡 <b>Clinical Explanation:</b> {raw_exp[:155]}"[:200]
     else:
-        exp_text = f"💡 <b>Explanation:</b> <tg-spoiler>Correct choice is: {correct_option_text}. Reference: Master Dentistry.</tg-spoiler>"[:200]
+        exp_text = f"💡 <b>Explanation:</b> Correct choice is: {correct_option_text}. Reference: Master Dentistry."[:200]
 
     payload = {
         'chat_id': chat_id,
@@ -153,7 +154,7 @@ def post_next_channel_question():
         increment_channel_post_count()
         update_channel_last_id(next_id)
         
-        # Post automatic deep clinical reference comment under the poll
+        # Send full deep clinical reference with Book Reference and Study Link
         comment_text = (
             f"📖 <b>Deep Clinical Reference — Question #{next_display}</b>\n"
             f"━━━━━━━━━━━━━━━━━━━━━━\n"
@@ -260,7 +261,7 @@ def handle_channel_info(chat_id):
 
 def run_bot():
     init_db()
-    print("Dental Telegram Quiz Bot is NOW LIVE (Auto-Comment Deep References Enabled)!")
+    print("Dental Telegram Quiz Bot is NOW LIVE (Clean Popup & Full Book References Enabled)!")
     offset = 0
     
     while True:
