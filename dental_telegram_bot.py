@@ -114,8 +114,8 @@ def send_quiz_poll(chat_id, question_data, is_anonymous=True, display_num=None):
     
     raw_exp = question_data.get('explanation', '')
     if raw_exp:
-        # Wrap explanation in HTML tg-spoiler tags for animated hidden text
-        exp_text = f"💡 <b>Clinical Explanation:</b> <tg-spoiler>{raw_exp}</tg-spoiler>"[:200]
+        # Wrap primary clinical explanation in tg-spoiler
+        exp_text = f"💡 <b>Clinical Explanation:</b> <tg-spoiler>{raw_exp[:140]}</tg-spoiler>"[:200]
     else:
         exp_text = f"💡 <b>Explanation:</b> <tg-spoiler>Correct choice is: {correct_option_text}. Reference: Master Dentistry.</tg-spoiler>"[:200]
 
@@ -170,7 +170,7 @@ def handle_start(chat_id, user_id, first_name, username):
         f"🦷 *Welcome Dr. {first_name} to Dental MCQs Platform!*\n\n"
         f"Designed to help you master board exams (ORE, MFDs, MJDF) efficiently.\n\n"
         f"📌 *Platform Features:*\n"
-        f"• 🎯 *910 Board Questions* categorized with clinical explanations.\n"
+        f"• 🎯 *910 Board Questions* categorized with full book references.\n"
         f"• 🔴 *Mistakes Deck:* Auto-saves missed questions for targeted review.\n"
         f"• 🏷️ *Specialties & Levels:* Filter by subject and difficulty.\n"
         f"• ⏩ *Progress Tracking:* Automatically resumes from where you left off.\n"
@@ -242,13 +242,14 @@ def execute_search(chat_id, query):
 def handle_channel_info(chat_id):
     info = (
         f"📢 *Official Dental Board Practice Channel:*\n{CHANNEL_ID}\n\n"
-        f"Interactive quizzes with clinical explanations are posted daily!"
+        f"Interactive quizzes with clinical explanations are posted daily!\n"
+        f"👉 [Click here to launch Private Practice Bot](https://t.me/dentistry_quiz_bot)"
     )
     send_message(chat_id, info)
 
 def run_bot():
     init_db()
-    print("Dental Telegram Quiz Bot is NOW LIVE (Spoiler Explanation & Balanced Levels)!")
+    print("Dental Telegram Quiz Bot is NOW LIVE (Unlimited Deep Chat References Enabled)!")
     offset = 0
     
     while True:
@@ -274,13 +275,14 @@ def run_bot():
                             if q_data:
                                 corr_idx = info['correct_option_id']
                                 corr_text = q_data['options'][corr_idx] if corr_idx < len(q_data['options']) else ""
-                                status_emoji = "✅" if is_corr else "❌"
+                                status_emoji = "✅ Correct" if is_corr else "❌ Incorrect"
                                 
+                                # Send full, untruncated 3-part reference & study link message in private chat
                                 exp_msg = (
-                                    f"{status_emoji} *Explanation Alert*\n"
+                                    f"{status_emoji} *Answer Analysis*\n"
                                     f"━━━━━━━━━━━━━━━━━━━━━━\n"
-                                    f"💡 *Correct Choice:* {corr_text}\n\n"
-                                    f"📖 *Clinical Explanation:*\n{q_data['explanation']}"
+                                    f"🎯 *Correct Option:* `{corr_text}`\n\n"
+                                    f"{q_data['explanation']}"
                                 )
                                 send_message(u_id, exp_msg)
                     
