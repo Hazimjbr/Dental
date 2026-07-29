@@ -5,6 +5,7 @@ import time
 import os
 import sqlite3
 import random
+import re
 from dental_db import (
     init_db, get_user, update_user_progress, log_user_answer,
     get_question_by_id, get_next_question, get_pending_mistakes, search_questions,
@@ -90,6 +91,35 @@ def send_message(chat_id, text, reply_markup=None, reply_to_message_id=None, par
         payload['reply_to_message_id'] = reply_to_message_id
     return api_call('sendMessage', payload)
 
+def format_compact_explanation(raw_exp, correct_option_text):
+    if not raw_exp:
+        return f"💡 Correct: {correct_option_text[:50]}. Ref: Master Dentistry."[:195]
+        
+    parts = raw_exp.split('\n\n')
+    main_text = parts[0].strip()
+    
+    ref_text = ''
+    link_text = ''
+    
+    for p in parts[1:]:
+        if 'Book Reference:' in p:
+            ref_text = p.replace('Book Reference:', '').strip()
+        elif 'Study Link:' in p:
+            link_text = p.replace('Study Link:', '').strip()
+            
+    if len(main_text) > 90:
+        main_text = main_text[:87] + '...'
+        
+    res = f"💡 {main_text}"
+    if ref_text:
+        ref_short = ref_text.replace('Master Dentistry ', 'MasterDent ').strip()
+        res += f"\n🏛️ {ref_short}"
+    if link_text:
+        link_short = re.sub(r'^https?://(www\.)?', '', link_text).strip()
+        res += f"\n🔗 {link_short}"
+        
+    return res[:195]
+
 def send_quiz_poll(chat_id, question_data, is_anonymous=True, display_num=None):
     category = question_data.get('category', 'General Dentistry')
     level = question_data.get('level', 'Level 2')
@@ -114,11 +144,7 @@ def send_quiz_poll(chat_id, question_data, is_anonymous=True, display_num=None):
     options = [opt[:100] for opt in shuffled_options[:10]]
 
     raw_exp = question_data.get('explanation', '')
-    if raw_exp:
-        # Clean, concise native explanation inside the poll card (no double blurring)
-        exp_text = f"💡 Clinical Explanation: {raw_exp[:170]}"[:200]
-    else:
-        exp_text = f"💡 Explanation: Correct choice is: {correct_option_text}. Reference: Master Dentistry."[:200]
+    exp_text = format_compact_explanation(raw_exp, correct_option_text)
 
     payload = {
         'chat_id': chat_id,
@@ -148,7 +174,7 @@ def post_next_channel_question():
     if res and res.get('ok'):
         increment_channel_post_count()
         update_channel_last_id(next_id)
-        print(f" Successfully posted Native Poll Question #{next_id} (Displayed as #{next_display}) to {CHANNEL_ID}")
+        print(f" Successfully posted Compact Native Question #{next_id} (Displayed as #{next_display}) to {CHANNEL_ID}")
         return next_display
     return None
 
@@ -247,7 +273,7 @@ def handle_channel_info(chat_id):
 
 def run_bot():
     init_db()
-    print("Dental Telegram Quiz Bot is NOW LIVE (Native Clean Poll Explanation)!")
+    print("Dental Telegram Quiz Bot is NOW LIVE (Compact Native Explanation with Links & Refs)!")
     offset = 0
     
     while True:
