@@ -113,31 +113,27 @@ def send_quiz_poll(chat_id, question_data, is_anonymous=True, display_num=None):
     
     question_text = f"❓ Question #{num}  |  {lvl_badge}  |  {cat_header}\n\n{question_data['question']}"[:300]
     options = [opt[:100] for opt in shuffled_options[:10]]
-    
-    raw_exp = question_data.get('explanation', '')
-    if raw_exp:
-        # Clean, unblurred text inside lightbulb popup
-        exp_text = f"💡 <b>Clinical Explanation:</b> {raw_exp[:155]}"[:200]
-    else:
-        exp_text = f"💡 <b>Explanation:</b> Correct choice is: {correct_option_text}. Reference: Master Dentistry."[:200]
 
+    # NO explanation passed to sendPoll -> removes top lightbulb 💡 popup completely!
     payload = {
         'chat_id': chat_id,
         'question': question_text,
         'options': json.dumps(options),
         'type': 'quiz',
         'correct_option_id': new_correct_id,
-        'explanation': exp_text,
-        'explanation_parse_mode': 'HTML',
         'is_anonymous': is_anonymous
     }
     
     res = api_call('sendPoll', payload)
     if res and res.get('ok'):
         poll_id = res['result']['poll']['id']
+        msg_id = res['result'].get('message_id', None)
         poll_question_map[poll_id] = {
             'question_id': question_data['id'],
-            'correct_option_id': new_correct_id
+            'correct_option_id': new_correct_id,
+            'channel_msg_id': msg_id,
+            'display_num': num,
+            'comment_posted': False
         }
     return res
 
@@ -148,23 +144,33 @@ def post_next_channel_question():
     
     next_display = get_channel_post_count() + 1
     
+    # Send clean poll without any initial comment or lightbulb
     res = send_quiz_poll(CHANNEL_ID, q, is_anonymous=True, display_num=next_display)
     if res and res.get('ok'):
-        poll_msg_id = res['result']['message_id']
         increment_channel_post_count()
         update_channel_last_id(next_id)
-        
-        # Send full deep clinical reference with Book Reference and Study Link
-        comment_text = (
-            f"📖 <b>Deep Clinical Reference — Question #{next_display}</b>\n"
-            f"━━━━━━━━━━━━━━━━━━━━━━\n"
-            f"{q['explanation']}"
-        )
-        send_message(CHANNEL_ID, comment_text, reply_to_message_id=poll_msg_id, parse_mode='HTML')
-        
-        print(f" Successfully posted Question #{next_id} (Displayed as #{next_display}) with auto-comment to {CHANNEL_ID}")
+        print(f" Successfully posted Clean Question #{next_id} (Displayed as #{next_display}) to {CHANNEL_ID}")
         return next_display
     return None
+
+def trigger_post_vote_comment(poll_id):
+    if poll_id in poll_question_map:
+        info = poll_question_map[poll_id]
+        if not info.get('comment_posted', False):
+            info['comment_posted'] = True
+            msg_id = info.get('channel_msg_id')
+            q_id = info.get('question_id')
+            display_num = info.get('display_num', q_id)
+            
+            q_data = get_question_by_id(q_id)
+            if q_data and msg_id:
+                comment_text = (
+                    f"📖 <b>Deep Clinical Reference — Question #{display_num}</b>\n"
+                    f"━━━━━━━━━━━━━━━━━━━━━━\n"
+                    f"{q_data['explanation']}"
+                )
+                send_message(CHANNEL_ID, comment_text, reply_to_message_id=msg_id, parse_mode='HTML')
+                print(f" Auto-posted post-vote deep reference for Question #{display_num} to channel!")
 
 def get_main_keyboard():
     return {
@@ -261,7 +267,7 @@ def handle_channel_info(chat_id):
 
 def run_bot():
     init_db()
-    print("Dental Telegram Quiz Bot is NOW LIVE (Clean Popup & Full Book References Enabled)!")
+    print("Dental Telegram Quiz Bot is NOW LIVE (Clean Polls + Post-Vote Dynamic References)!")
     offset = 0
     
     while True:
@@ -271,11 +277,19 @@ def run_bot():
                 for update in res.get('result', []):
                     offset = update['update_id'] + 1
                     
+                    # Handle channel poll vote updates
+                    if 'poll' in update:
+                        p_id = update['poll']['id']
+                        if update['poll']['total_voter_count'] > 0:
+                            trigger_post_vote_comment(p_id)
+                            
                     if 'poll_answer' in update:
                         pa = update['poll_answer']
                         u_id = pa['user']['id']
                         p_id = pa['poll_id']
                         option_ids = pa.get('option_ids', [])
+                        
+                        trigger_post_vote_comment(p_id)
                         
                         if p_id in poll_question_map and option_ids:
                             chosen = option_ids[0]
