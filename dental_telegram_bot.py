@@ -93,27 +93,20 @@ def send_message(chat_id, text, reply_markup=None, reply_to_message_id=None, par
 
 def format_compact_explanation(raw_exp, correct_option_text):
     if not raw_exp:
-        return f"💡 Correct choice: {correct_option_text[:40]}. Ref: Master Dentistry."[:195]
+        return f"💡 Correct choice: {correct_option_text[:60]}. Ref: Master Dentistry."[:195]
         
     parts = raw_exp.split('\n\n')
     main_sentence = parts[0].strip()
     
     ref_text = ''
-    link_text = ''
-    
     for p in parts[1:]:
         if 'Book Reference:' in p:
             ref_text = p.replace('Book Reference:', '').replace('🏛️', '').strip()
-        elif 'Study Link:' in p:
-            link_text = p.replace('Study Link:', '').replace('🔗', '').strip()
             
     res = f"💡 {main_sentence}"
     if ref_text:
         ref_clean = ref_text.replace('Master Dentistry ', 'MasterDent ').strip()
         res += f"\n🏛️ {ref_clean}"
-    if link_text:
-        link_clean = link_text.replace('https://', '').replace('http://', '').strip()
-        res += f"\n🔗 {link_clean}"
         
     return res[:195]
 
