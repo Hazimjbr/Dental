@@ -98,17 +98,6 @@ def format_compact_explanation(raw_exp, correct_option_text):
     parts = raw_exp.split('\n\n')
     main_sentence = parts[0].strip()
     
-    # Remove parenthetical clauses if text is too long to fit cleanly without trailing '...'
-    if len(main_sentence) > 95:
-        main_sentence = re.sub(r'\s*\([^)]*\)', '', main_sentence).strip()
-        
-    # Pick first complete sentence
-    first_period = main_sentence.find('.')
-    if first_period > 20 and first_period < 110:
-        main_sentence = main_sentence[:first_period + 1]
-    elif len(main_sentence) > 105:
-        main_sentence = main_sentence[:102].rsplit(' ', 1)[0] + '.'
-
     ref_text = ''
     link_text = ''
     
@@ -123,7 +112,7 @@ def format_compact_explanation(raw_exp, correct_option_text):
         ref_clean = ref_text.replace('Master Dentistry ', 'MasterDent ').strip()
         res += f"\n🏛️ {ref_clean}"
     if link_text:
-        link_clean = link_text.replace('https://www.', '').replace('https://', '').strip()
+        link_clean = link_text.replace('https://', '').replace('http://', '').strip()
         res += f"\n🔗 {link_clean}"
         
     return res[:195]
@@ -182,7 +171,7 @@ def post_next_channel_question():
     if res and res.get('ok'):
         increment_channel_post_count()
         update_channel_last_id(next_id)
-        print(f" Successfully posted Perfect Sentence Question #{next_id} (Displayed as #{next_display}) to {CHANNEL_ID}")
+        print(f" Successfully posted PubMed Live Question #{next_id} (Displayed as #{next_display}) to {CHANNEL_ID}")
         return next_display
     return None
 
@@ -202,7 +191,7 @@ def handle_start(chat_id, user_id, first_name, username):
         f"🦷 <b>Welcome Dr. {first_name} to Dental MCQs Platform!</b>\n\n"
         f"Designed to help you master board exams (ORE, MFDs, MJDF) efficiently.\n\n"
         f"📌 <b>Platform Features:</b>\n"
-        f"• 🎯 <b>910 Board Questions</b> categorized with full book references.\n"
+        f"• 🎯 <b>910 Board Questions</b> categorized with PubMed & Book references.\n"
         f"• 🔴 <b>Mistakes Deck:</b> Auto-saves missed questions for targeted review.\n"
         f"• 🏷️ <b>Specialties & Levels:</b> Filter by subject and difficulty.\n"
         f"• ⏩ <b>Progress Tracking:</b> Automatically resumes from where you left off.\n"
@@ -281,7 +270,7 @@ def handle_channel_info(chat_id):
 
 def run_bot():
     init_db()
-    print("Dental Telegram Quiz Bot is NOW LIVE (Perfect Complete Sentence Formatting)!")
+    print("Dental Telegram Quiz Bot is NOW LIVE (PubMed Live Search Links Enabled)!")
     offset = 0
     
     while True:
