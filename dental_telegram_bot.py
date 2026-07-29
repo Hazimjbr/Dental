@@ -95,17 +95,23 @@ def format_compact_explanation(raw_exp, correct_option_text):
     if not raw_exp:
         return f"💡 Correct choice: {correct_option_text[:60]}. Ref: Master Dentistry."[:195]
         
-    parts = raw_exp.split('\n\n')
-    main_sentence = parts[0].strip()
+    lines = [line.strip() for line in raw_exp.split('\n') if line.strip()]
     
-    ref_text = ''
-    for p in parts[1:]:
-        if 'Book Reference:' in p:
-            ref_text = p.replace('Book Reference:', '').replace('🏛️', '').strip()
-            
-    res = f"💡 {main_sentence}"
-    if ref_text:
-        ref_clean = ref_text.replace('Master Dentistry ', 'MasterDent ').strip()
+    explanation_sentence = ""
+    book_ref = ""
+    
+    for line in lines:
+        if '🔗' in line or 'Study Link' in line:
+            continue
+        if 'Book Reference:' in line or '🏛️' in line:
+            book_ref = line.replace('Book Reference:', '').replace('🏛️', '').strip()
+        else:
+            if not explanation_sentence:
+                explanation_sentence = line
+                
+    res = f"💡 {explanation_sentence}"
+    if book_ref:
+        ref_clean = book_ref.replace('Master Dentistry ', 'MasterDent ').strip()
         res += f"\n🏛️ {ref_clean}"
         
     return res[:195]
